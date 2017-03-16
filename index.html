@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<script src="js/artyom.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+	</head>
+
+	<body>
+		<button onclick="startArtyom()">Strat</button>
+		<button onclick="stopArtyom()">Stop</button>
+		<div id="output"></div>
+		<script type="text/javascript">
+			function startArtyom() {
+				artyom.initialize({
+					lang: "en-GB", // GreatBritain english
+					continuous: false, // Listen forever
+					soundex: true, // Use the soundex algorithm to increase accuracy
+					debug: true, // Show messages in the console
+					executionKeyword: "and do it now",
+					listen: true // Start to listen commands !
+				}).then(() => {
+					console.log("Artyom has been succesfully initialized");
+				}).catch((err) => {
+					console.error("Artyom couldn't be initialized: ", err);
+				});
+			};
+			
+			function stopArtyom(){
+				artyom.fatality();
+			}
+			
+			var output=$("#output");
+			artyom.addCommands([
+				{
+					indexes:["hello","hi"],
+					action:function(i){
+						if(i==0){
+							artyom.say("Hello ! How are you.")
+						}
+					}
+				}
+			]);
+			
+			artyom.redirectRecognizedTextOutput(function(text,isFinal){
+				if(isFinal){
+					output.text("");
+				}else{
+					output.text(text);
+				}
+			});
+		</script>
+	</body>
+
+</html>
